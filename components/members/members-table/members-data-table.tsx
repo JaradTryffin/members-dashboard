@@ -28,15 +28,20 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { MemberSheet } from "@/components/members/members-sheet/members-sheet";
+import { json2csv } from "json-2-csv";
+import toast from "react-hot-toast";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  addUpdateComponent?: JSX.Element;
 }
 
-export function MemberDataTable<TData, TValue>({
+export function DataTable<TData, TValue>({
   columns,
   data,
+  addUpdateComponent,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -64,6 +69,28 @@ export function MemberDataTable<TData, TValue>({
       rowSelection,
     },
   });
+
+  const handleExportMember = () => {
+    try {
+      const csv = json2csv(data as any);
+      // Create a Blob object from the CSV data
+      const blob = new Blob([csv], { type: "text/csv" });
+      // Create a temporary URL for the Blob
+      const url = window.URL.createObjectURL(blob);
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href = url;
+      // Set the filename for the downloaded CSV file
+      link.download = "members.csv";
+      // Programmatically click the link to trigger the download
+      link.click();
+      // Release the temporary URL resource
+      window.URL.revokeObjectURL(url);
+      toast.success("Successfully downloaded");
+    } catch (error) {
+      toast.error("Failed to Download Members");
+    }
+  };
 
   return (
     <div>
@@ -101,6 +128,15 @@ export function MemberDataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+        <div className="pl-3">
+          <Button onClick={handleExportMember} variant="outline">
+            Export
+          </Button>
+        </div>
+        <div className="pl-3">
+          {/*<MemberSheet />*/}
+          {addUpdateComponent}
+        </div>
       </div>
       <div className="rounded-md border">
         <Table>

@@ -11,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useSheet } from "@/hooks/use-sheet";
+import { useStoreMember } from "@/hooks/use-member";
 
 export type MemberColumns = {
   id: string;
@@ -20,6 +22,9 @@ export type MemberColumns = {
   contact: string;
   joined: Date;
 };
+
+const sheet = useSheet.getState();
+const memberStore = useStoreMember.getState();
 
 export const membersColumns: ColumnDef<MemberColumns>[] = [
   {
@@ -60,13 +65,14 @@ export const membersColumns: ColumnDef<MemberColumns>[] = [
     accessorKey: "lastName",
     header: "Last Name",
   },
-  {
-    accessorKey: "address",
-    header: "Address",
-  },
+
   {
     accessorKey: "contact",
     header: "Contact",
+  },
+  {
+    accessorKey: "address",
+    header: "Address",
   },
   {
     accessorKey: "joined",
@@ -100,7 +106,20 @@ export const membersColumns: ColumnDef<MemberColumns>[] = [
               Copy member id
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View Member</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                sheet.onOpen();
+                memberStore.setMember({
+                  id: member.id,
+                  firstName: member.firstName,
+                  lastName: member.lastName,
+                  address: member.address,
+                  contact: member.contact,
+                });
+              }}
+            >
+              Edit Member
+            </DropdownMenuItem>
             <DropdownMenuItem>Send Message</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
