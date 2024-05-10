@@ -30,3 +30,27 @@ export async function POST(
     return new NextResponse("Internal error", { status: 500 });
   }
 }
+
+export async function GET(
+  req: Request,
+  { params }: { params: { entityId: string } },
+) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthenticated", { status: 401 });
+    }
+
+    const events = await prismadb.event.findMany({
+      where: {
+        entityId: params.entityId,
+      },
+    });
+
+    return NextResponse.json(events);
+  } catch (error) {
+    console.log("[EVENT_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}
