@@ -8,7 +8,6 @@ import { useRegisteredMemberId } from "@/hooks/use-register-member-id";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Attendance } from "@prisma/client";
-import { useEffect } from "react";
 
 interface RegisterCheckBoxProps {
   row: Row<MemberRegisterTypeColumns>;
