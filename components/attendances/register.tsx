@@ -25,6 +25,8 @@ import {
 import { useEventId } from "@/hooks/use-event";
 import axios from "axios";
 import { useRegisteredMemberId } from "@/hooks/use-register-member-id";
+import { router } from "next/client";
+import { useRouter } from "next/navigation";
 
 interface RegisterProps {
   events: Event[];
