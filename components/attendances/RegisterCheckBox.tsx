@@ -8,6 +8,7 @@ import { useRegisteredMemberId } from "@/hooks/use-register-member-id";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Attendance } from "@prisma/client";
+import { useEffect } from "react";
 
 interface RegisterCheckBoxProps {
   row: Row<MemberRegisterTypeColumns>;
@@ -60,14 +61,14 @@ export const RegisterCheckbox = ({ row }: RegisterCheckBoxProps) => {
     <div>
       <Checkbox
         checked={registeredMembersIds.memberRegisteredId.includes(memberId)}
-        onCheckedChange={(value) => {
+        onCheckedChange={async (value) => {
           row.toggleSelected(!!value);
           if (value) {
-            markPresent().catch((error) => console.log(error));
+            await markPresent().catch((error) => console.log(error));
           } else {
-            deleteAttendance().catch((error) => console.log(error));
+            await deleteAttendance().catch((error) => console.log(error));
           }
-          fetchAttendedMembers(eventStore.eventId).catch((error) =>
+          await fetchAttendedMembers(eventStore.eventId).catch((error) =>
             console.log(error),
           );
         }}
