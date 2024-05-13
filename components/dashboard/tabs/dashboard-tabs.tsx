@@ -4,16 +4,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MemberTab } from "@/components/dashboard/tabs/member-tab/members-tab";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { DashboardCards } from "@/types/dashboard-card.types";
+import { useMemberDashboard } from "@/hooks/use-member-dashboard";
 
 export function DashboardTabs() {
   const params = useParams();
+  const membersDashboard = useMemberDashboard();
 
   const fetchDashboardData = async () => {
     const result = await axios.get(
       `/api/entities/${params.entityId}/dashboard`,
     );
-    console.log("result", result.data);
+    membersDashboard.setDashboardInfo(result.data);
   };
 
   useEffect(() => {

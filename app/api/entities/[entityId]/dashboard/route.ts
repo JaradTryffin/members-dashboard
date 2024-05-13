@@ -23,35 +23,35 @@ export async function GET(
     });
 
     // Fetch total number of attendances for all events
-    const attendedMemberIds = new Set(
-      (
-        await prismadb.attendance.findMany({
-          where: {
-            event: {
-              entity: {
-                id: entityId,
-              },
-            },
+    const totalAttendances = await prismadb.attendance.count({
+      where: {
+        attended: true,
+        member: {
+          entity: {
+            id: entityId,
           },
-          select: {
-            memberId: true,
+        },
+      },
+    });
+
+    // Fetch total number of members absent (not attended any event)
+    const totalAbsentMembers = await prismadb.attendance.count({
+      where: {
+        attended: false,
+        member: {
+          entity: {
+            id: entityId,
           },
-        })
-      ).map((attendance) => attendance.memberId),
-    );
+        },
+      },
+    });
 
-    const totalAttendances = attendedMemberIds.size;
-
+    // Fetch total number of events
     const totalEvents = await prismadb.event.count({
       where: {
         entityId: entityId,
       },
     });
-
-    // Calculate total number of absent members
-    const totalAbsentMembers = totalMembers * totalEvents - totalAttendances;
-
-    // Fetch total number of events
 
     return new NextResponse(
       JSON.stringify({
