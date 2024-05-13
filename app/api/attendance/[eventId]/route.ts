@@ -16,6 +16,7 @@ export async function GET(
     const attendances = await prismadb.attendance.findMany({
       where: {
         eventId: params.eventId,
+        attended:true
       },
     });
 

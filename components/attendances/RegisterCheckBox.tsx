@@ -19,33 +19,19 @@ export const RegisterCheckbox = ({ row }: RegisterCheckBoxProps) => {
   const memberId = row.original.id;
 
   // mark users present
-  const markPresent = async () => {
+  const markRegister = async (attended: boolean) => {
     try {
-      await axios.post(`/api/attendance`, {
+      await axios.patch(`/api/attendance`, {
         memberId,
         eventId: eventStore.eventId,
-        attended: true,
+        attended: attended,
       });
       toast.success("Member registered for event");
     } catch (error) {
       toast.error("Failed to register member for event");
     }
   };
-  // delete an attendance
 
-  const deleteAttendance = async () => {
-    try {
-      await axios.delete(`/api/attendance`, {
-        data: {
-          memberId,
-          eventId: eventStore.eventId,
-        },
-      });
-      toast.success("Attendance deleted");
-    } catch (error) {
-      toast.error("Failed to remove attendance");
-    }
-  };
   // after marking present or removing record of present update ui
 
   const fetchAttendedMembers = async (eventId: string) => {
@@ -63,9 +49,9 @@ export const RegisterCheckbox = ({ row }: RegisterCheckBoxProps) => {
         onCheckedChange={async (value) => {
           row.toggleSelected(!!value);
           if (value) {
-            await markPresent().catch((error) => console.log(error));
+            await markRegister(true).catch((error) => console.log(error));
           } else {
-            await deleteAttendance().catch((error) => console.log(error));
+            await markRegister(false).catch((error) => console.log(error));
           }
           await fetchAttendedMembers(eventStore.eventId).catch((error) =>
             console.log(error),

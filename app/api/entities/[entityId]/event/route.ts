@@ -24,6 +24,23 @@ export async function POST(
         entityId: params.entityId,
       },
     });
+
+    const members = await prismadb.member.findMany({
+      where: { entityId: params.entityId },
+    });
+
+    // Create attendance record for each member with 'attended' set to false
+    await Promise.all(
+      members.map(async (member) => {
+        await prismadb.attendance.create({
+          data: {
+            memberId: member.id,
+            eventId: event.id,
+            attended: false,
+          },
+        });
+      }),
+    );
     return NextResponse.json(event);
   } catch (error) {
     console.log("[EVENT_POST]", error);
