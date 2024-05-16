@@ -53,7 +53,8 @@ model Attendance {
   member         Member   @relation(fields: [memberId], references: [id])
   memberId       String
   eventId        String
-  event          Event    @relation(fields: [eventId], references: [id])
-  attendanceDate DateTime @default(now())
+  event          Event     @relation(fields: [eventId], references: [id])
+  attendanceDate DateTime  @default(now())
+  updatedAt      DateTime   @updatedAt() @default(now())
   attended       Boolean
 }

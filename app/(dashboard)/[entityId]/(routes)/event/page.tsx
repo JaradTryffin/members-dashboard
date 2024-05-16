@@ -23,6 +23,9 @@ export default async function EventPage({ params }: EventPageProps) {
   });
 
   const filteredEvents = events.map((event) => {
+    const attendedAttendances = event.attendances.filter(
+      (attendance) => attendance.attended,
+    );
     return {
       id: event.id,
       name: event.name,
@@ -30,7 +33,7 @@ export default async function EventPage({ params }: EventPageProps) {
       endTime: moment(event.endTime).format("hh:mm A"),
       location: event.location,
       date: moment(event.date).format("ddd, MM/DD/YYYY"),
-      attendances: event.attendances.length,
+      attendances: attendedAttendances.length,
     };
   });
 
