@@ -4,13 +4,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MemberTab } from "@/components/dashboard/tabs/member-tab/members-tab";
 import axios from "axios";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { DashboardCards } from "@/types/dashboard-card.types";
+import { useEffect } from "react";
 import { useMemberDashboard } from "@/hooks/use-member-dashboard";
+import { useMemberLineTrend } from "@/hooks/use-member-line-trend";
 
 export function DashboardTabs() {
   const params = useParams();
   const membersDashboard = useMemberDashboard();
+  const memberLine = useMemberLineTrend();
 
   const fetchDashboardData = async () => {
     const result = await axios.get(
@@ -19,8 +20,16 @@ export function DashboardTabs() {
     membersDashboard.setDashboardInfo(result.data);
   };
 
+  const fetchLineChartTrends = async () => {
+    const result = await axios.get(
+      `/api/entities/${params.entityId}/dashboard/line-chart`,
+    );
+    memberLine.setAttendanceTrends(result.data);
+  };
+
   useEffect(() => {
     fetchDashboardData().catch((error) => console.log(error));
+    fetchLineChartTrends().catch((error) => console.log(error));
   }, []);
   return (
     <Tabs defaultValue="members" className="w-full">
