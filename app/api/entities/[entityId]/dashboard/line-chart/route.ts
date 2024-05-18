@@ -19,18 +19,21 @@ export async function GET(
         entityId: params.entityId,
       },
       include: {
-        attendances: {
-          where: {
-            attended: true,
-          },
-        },
+        attendances: {},
       },
     });
 
     const attendanceTrends = events.map((event) => {
+      const presentCount = event.attendances.filter(
+        (att) => att.attended,
+      ).length;
+      const absentCount = event.attendances.filter(
+        (att) => !att.attended,
+      ).length;
       return {
         date: event.date,
-        attendanceTrends: event.attendances.length,
+        attendanceTrends: presentCount,
+        absentTrends: absentCount,
       };
     });
 

@@ -3,6 +3,7 @@
 import { MembersPieChart } from "@/components/dashboard/tabs/member-tab/members-pie-chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MemberLineTrend } from "@/components/dashboard/tabs/member-tab/member-line-trend";
+import { MemberBarChart } from "@/components/dashboard/tabs/member-tab/member-bar-chart";
 
 export function MemberCharts() {
   return (
@@ -19,10 +20,10 @@ export function MemberCharts() {
       <div className="flex flex-col space-y-2.5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            Trends for events over time
+            Present vs Absent over events
           </CardHeader>
           <CardContent>
-            <MemberLineTrend />
+            <MemberBarChart />
           </CardContent>
         </Card>
 

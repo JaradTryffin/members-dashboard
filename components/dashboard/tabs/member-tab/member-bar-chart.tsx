@@ -9,20 +9,20 @@ import {
   Title,
   Tooltip,
   Legend,
+  BarElement,
 } from "chart.js";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 );
 
-export const MemberLineTrend = () => {
+export const MemberBarChart = () => {
   const memberLineTrend = useMemberLineTrend();
 
   const labels = memberLineTrend.attendanceTrends.map((event) =>
@@ -57,7 +57,7 @@ export const MemberLineTrend = () => {
   };
   return (
     <>
-      <Line data={data} />
+      <Bar data={data} />
     </>
   );
 };

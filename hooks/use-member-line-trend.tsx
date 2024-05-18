@@ -4,6 +4,7 @@ import { create } from "zustand";
 interface AttendanceTrend {
   date: string; // ISO 8601 date string
   attendanceTrends: number;
+  absentTrends: number;
 }
 
 // Define the state shape
